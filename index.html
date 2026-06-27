@@ -408,10 +408,10 @@
 
   const STORE_KEY = "habit_tracker_v1";
   const THEME_KEY = "habit_tracker_theme";
-  // Show example habits when there's no saved data yet. Set to false for the
-  // "real" app so a fresh user starts empty. Demo data is NOT persisted — it
-  // regenerates on each load until you add your own habit.
-  const SEED_DEMO = true;
+  // When true, show non-persisted example habits on an empty load (for previewing).
+  // When false, a fresh/empty install is seeded once with the real starter habits
+  // (see seedStarter) which ARE saved.
+  const SEED_DEMO = false;
   let demoActive = false;
   const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -980,9 +980,25 @@
     demoActive = true;
   }
 
+  // Real starter habits for a fresh install — saved (unlike the demo).
+  function seedStarter() {
+    state.habits = [{
+      id: "take_meds",
+      name: "take meds",
+      subs: [{ id: "sub_vyvanse", name: "vyvanse" }, { id: "sub_wellbutrin", name: "wellbutrin" }],
+      subLog: {},
+      log: {}
+    }];
+    state.seeded = true; // guard so deleting all habits doesn't re-seed
+    save();
+  }
+
   // ---------- boot ----------
   initTheme();
-  if (SEED_DEMO && state.habits.length === 0) seedDemo();
+  if (state.habits.length === 0) {
+    if (SEED_DEMO) seedDemo();
+    else if (!state.seeded) seedStarter();
+  }
   render();
 })();
 </script>
