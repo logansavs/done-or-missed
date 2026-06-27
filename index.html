@@ -27,6 +27,7 @@
     --cell-future: #f4f4f4;
     --done: #22C55E;
     --missed: #EF4444;
+    --partial: #F59E0B;
     --accent: #141414;
     --card-bg: #fafafa;
   }
@@ -39,6 +40,7 @@
     --cell-future: #121212;
     --done: #22C55E;
     --missed: #EF4444;
+    --partial: #F59E0B;
     --accent: #ededed;
     --card-bg: #0c0c0c;
   }
@@ -297,6 +299,73 @@
     margin-bottom: 4px;
   }
 
+  /* ---- partial (some sub-items done) ---- */
+  .day.partial, .ycell.partial { background: var(--partial); }
+  .mday.partial { background: var(--partial); color: #4a3000; }
+
+  /* ---- sub-item checklist ---- */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 2px 0 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+  }
+  .checklist-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--fg-dim);
+    margin-bottom: 2px;
+  }
+  .checklist-head .count b { color: var(--fg); }
+  .sub-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .sub-box {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 auto;
+    border: 1.5px solid var(--fg-dim);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+  }
+  .sub-item.checked .sub-box { background: var(--done); border-color: var(--done); }
+  .sub-item.checked .sub-label { color: var(--fg-dim); text-decoration: line-through; }
+  .sub-remove {
+    margin-left: auto;
+    border: none;
+    background: none;
+    color: var(--fg-dim);
+    font-size: 11px;
+    padding: 0 4px;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .sub-item:hover .sub-remove { opacity: 0.55; }
+  .sub-remove:hover { opacity: 1; color: var(--missed); }
+  .add-sub {
+    align-self: flex-start;
+    font-size: 11px;
+    padding: 4px 9px;
+    margin: -6px 0 14px;
+    color: var(--fg-dim);
+  }
+
   footer { margin-top: 32px; font-size: 11px; color: var(--fg-dim); text-align: center; }
 </style>
 </head>
@@ -324,6 +393,7 @@
   <div class="legend">
     <span><span class="swatch" style="background:var(--done)"></span>done</span>
     <span><span class="swatch" style="background:var(--missed)"></span>missed</span>
+    <span><span class="swatch" style="background:var(--partial)"></span>partial</span>
     <span><span class="swatch" style="background:var(--cell-empty)"></span>unlogged</span>
     <span><span class="swatch" style="background:var(--cell-future);border:1px solid var(--border)"></span>future</span>
     <span style="margin-left:auto">click a cell to toggle done → missed → clear</span>
@@ -412,37 +482,110 @@
     render();
   }
 
-  // toggle cycle: undefined -> true(done) -> false(missed) -> undefined
+  // ---------- sub-item (checklist) helpers ----------
+  function hasSubs(h) { return Array.isArray(h.subs) && h.subs.length > 0; }
+
+  // status for a day: 'done' (all subs / logged true) | 'partial' (some subs) |
+  // 'missed' (logged false, plain habits only) | '' (unlogged)
+  function dayStatus(h, key) {
+    if (hasSubs(h)) {
+      const entry = (h.subLog && h.subLog[key]) || {};
+      let done = 0;
+      for (const s of h.subs) if (entry[s.id]) done++;
+      if (done === h.subs.length) return "done";
+      if (done > 0) return "partial";
+      return "";
+    }
+    if (h.log[key] === true) return "done";
+    if (h.log[key] === false) return "missed";
+    return "";
+  }
+
+  function doneDaysList(h) {
+    if (hasSubs(h)) {
+      return Object.keys(h.subLog || {}).filter(k => dayStatus(h, k) === "done");
+    }
+    return Object.keys(h.log).filter(k => h.log[k] === true);
+  }
+
+  function toggleSub(id, subId, key) {
+    if (isFuture(key)) return;
+    const h = state.habits.find(x => x.id === id);
+    if (!h || !hasSubs(h)) return;
+    if (!h.subLog) h.subLog = {};
+    const e = h.subLog[key] || (h.subLog[key] = {});
+    if (e[subId]) delete e[subId]; else e[subId] = true;
+    if (Object.keys(e).length === 0) delete h.subLog[key];
+    save();
+    render();
+  }
+
+  function addSub(id) {
+    const h = state.habits.find(x => x.id === id);
+    if (!h) return;
+    const name = (prompt("New checklist item:") || "").trim();
+    if (!name) return;
+    if (!h.subs) h.subs = [];
+    if (!h.subLog) h.subLog = {};
+    h.subs.push({ id: "s" + Date.now() + Math.random().toString(36).slice(2, 5), name });
+    save();
+    render();
+  }
+
+  function removeSub(id, subId) {
+    const h = state.habits.find(x => x.id === id);
+    if (!h || !hasSubs(h)) return;
+    const sub = h.subs.find(s => s.id === subId);
+    if (sub && !confirm(`Remove checklist item "${sub.name}"?`)) return;
+    h.subs = h.subs.filter(s => s.id !== subId);
+    if (h.subLog) for (const k in h.subLog) { delete h.subLog[k][subId]; if (!Object.keys(h.subLog[k]).length) delete h.subLog[k]; }
+    save();
+    render();
+  }
+
+  // toggle a day cell. plain habit: undefined -> done -> missed -> clear.
+  // checklist habit: clear <-> all items done (use the checklist for partials).
   function toggleDay(id, key) {
     if (isFuture(key)) return;
     const h = state.habits.find(x => x.id === id);
     if (!h) return;
-    const cur = h.log[key];
-    if (cur === undefined) h.log[key] = true;
-    else if (cur === true) h.log[key] = false;
-    else delete h.log[key];
+    if (hasSubs(h)) {
+      if (!h.subLog) h.subLog = {};
+      if (dayStatus(h, key) === "done") {
+        delete h.subLog[key];
+      } else {
+        const e = {};
+        for (const s of h.subs) e[s.id] = true;
+        h.subLog[key] = e;
+      }
+    } else {
+      const cur = h.log[key];
+      if (cur === undefined) h.log[key] = true;
+      else if (cur === true) h.log[key] = false;
+      else delete h.log[key];
+    }
     save();
     render();
   }
 
   // ---------- streaks ----------
   // current streak = consecutive completed days ending today (or yesterday if today unlogged)
-  function currentStreak(log) {
+  function currentStreak(h) {
     let streak = 0;
     let cursor = new Date();
     // allow streak to count even if today not yet logged
-    if (log[dateKey(cursor)] !== true) {
+    if (dayStatus(h, dateKey(cursor)) !== "done") {
       cursor = addDays(cursor, -1);
     }
-    while (log[dateKey(cursor)] === true) {
+    while (dayStatus(h, dateKey(cursor)) === "done") {
       streak++;
       cursor = addDays(cursor, -1);
     }
     return streak;
   }
 
-  function longestStreak(log) {
-    const doneDays = Object.keys(log).filter(k => log[k] === true).sort();
+  function longestStreak(h) {
+    const doneDays = doneDaysList(h).sort();
     if (doneDays.length === 0) return 0;
     let longest = 1, run = 1;
     for (let i = 1; i < doneDays.length; i++) {
@@ -458,11 +601,9 @@
   // ---------- rendering ----------
   const habitsEl = document.getElementById("habits");
 
-  function cellClass(log, key) {
+  function cellClass(h, key) {
     if (isFuture(key)) return "future";
-    if (log[key] === true) return "done";
-    if (log[key] === false) return "missed";
-    return "";
+    return dayStatus(h, key); // 'done' | 'partial' | 'missed' | ''
   }
 
   function render() {
@@ -511,8 +652,8 @@
 
     const stats = document.createElement("div");
     stats.className = "stats";
-    const cur = currentStreak(h.log);
-    const lng = longestStreak(h.log);
+    const cur = currentStreak(h);
+    const lng = longestStreak(h);
     stats.innerHTML =
       `<span class="stat">current <b class="fire">${cur}</b> ${cur === 1 ? "day" : "days"}</span>` +
       `<span class="stat">longest <b>${lng}</b> ${lng === 1 ? "day" : "days"}</span>`;
@@ -528,6 +669,56 @@
     head.appendChild(del);
 
     card.appendChild(head);
+
+    // today's sub-item checklist
+    if (hasSubs(h)) {
+      const tKey = todayKey();
+      const entry = (h.subLog && h.subLog[tKey]) || {};
+      const done = h.subs.filter(s => entry[s.id]).length;
+
+      const cl = document.createElement("div");
+      cl.className = "checklist";
+
+      const chead = document.createElement("div");
+      chead.className = "checklist-head";
+      chead.innerHTML = `<span>today's checklist</span><span class="count"><b>${done}</b>/${h.subs.length}</span>`;
+      cl.appendChild(chead);
+
+      for (const s of h.subs) {
+        const checked = !!entry[s.id];
+        const item = document.createElement("div");
+        item.className = "sub-item" + (checked ? " checked" : "");
+
+        const box = document.createElement("span");
+        box.className = "sub-box";
+        box.textContent = checked ? "✓" : "";
+
+        const lab = document.createElement("span");
+        lab.className = "sub-label";
+        lab.textContent = s.name;
+
+        const rm = document.createElement("button");
+        rm.className = "sub-remove";
+        rm.textContent = "✕";
+        rm.title = "remove item";
+        rm.onclick = (e) => { e.stopPropagation(); removeSub(h.id, s.id); };
+
+        item.appendChild(box);
+        item.appendChild(lab);
+        item.appendChild(rm);
+        item.onclick = () => toggleSub(h.id, s.id, tKey);
+        cl.appendChild(item);
+      }
+      card.appendChild(cl);
+    }
+
+    // add-checklist-item button
+    const addItem = document.createElement("button");
+    addItem.className = "add-sub";
+    addItem.textContent = hasSubs(h) ? "+ item" : "+ checklist";
+    addItem.title = "add a checklist item";
+    addItem.onclick = () => addSub(h.id);
+    card.appendChild(addItem);
 
     if (currentView === "week") card.appendChild(renderWeek(h));
     else if (currentView === "month") card.appendChild(renderMonth(h));
@@ -567,7 +758,7 @@
       dow.textContent = DAY_NAMES[i];
 
       const day = document.createElement("div");
-      day.className = "day " + cellClass(h.log, key);
+      day.className = "day " + cellClass(h, key);
       if (key === tKey) day.classList.add("today");
 
       const dnum = document.createElement("div");
@@ -622,7 +813,7 @@
       const d = new Date(year, month, day);
       const key = dateKey(d);
       const cell = document.createElement("div");
-      cell.className = "mday " + cellClass(h.log, key);
+      cell.className = "mday " + cellClass(h, key);
       if (key === tKey) cell.classList.add("today");
       cell.textContent = day;
       makeToggleCell(cell, h, key);
@@ -674,7 +865,7 @@
         const d = addDays(startMonday, c * 7 + r);
         const key = dateKey(d);
         const cell = document.createElement("div");
-        cell.className = "ycell " + cellClass(h.log, key);
+        cell.className = "ycell " + cellClass(h, key);
         if (key === tKey) cell.classList.add("today");
         makeToggleCell(cell, h, key);
         grid.appendChild(cell);
@@ -757,7 +948,24 @@
       }
       return { id: "demo_" + name.replace(/\W+/g, "_"), name, log };
     }
+    // checklist habit: "done" only when every item is ticked, "partial" otherwise
+    function mkMeds() {
+      const subs = [{ id: "sub_vyvanse", name: "vyvanse" }, { id: "sub_wellbutrin", name: "wellbutrin" }];
+      let s = 24681357 >>> 0;
+      const rnd = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+      const subLog = {};
+      for (let i = 60; i >= 0; i--) {
+        const k = dateKey(addDays(today, -i));
+        const r = rnd();
+        if (r < 0.8) subLog[k] = { sub_vyvanse: true, sub_wellbutrin: true }; // both → done
+        else if (r < 0.9) subLog[k] = { sub_vyvanse: true };                  // one → partial
+        // else none → unlogged
+      }
+      subLog[dateKey(today)] = { sub_vyvanse: true }; // today: partial, to show the state
+      return { id: "demo_take_meds", name: "take meds", subs, subLog, log: {} };
+    }
     state.habits = [
+      mkMeds(),
       // clean long streak (no recent override)
       mk("read 30min",   140, 0.88, 14, 0.6, 12345),
       // mix of misses + an empty day this week
