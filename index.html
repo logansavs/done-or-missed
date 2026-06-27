@@ -16,7 +16,7 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAtKADAAQAAAABAAAAtAAAAAB1HbRDAAADZElEQVR4Ae3SAQ0AIRAEseelIAy36IIEGZOeg53rmHudzykQKfBHdpihwCsANAipAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pzAVQ3wOs0fx2XQAAAABJRU5ErkJggg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FFFFFF;
@@ -51,12 +51,17 @@
     margin: 0;
     background: var(--bg);
     color: var(--fg);
-    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     padding: 32px 20px 64px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
+  /* keep uppercase consistent across form controls */
+  button, input { text-transform: uppercase; }
+  input::placeholder { text-transform: uppercase; }
 
   .wrap { max-width: 1180px; margin: 0 auto; }
 
@@ -181,7 +186,7 @@
     align-items: center;
     gap: 3px;
   }
-  .week-cell .dow { font-size: 9px; color: var(--fg-dim); text-transform: lowercase; }
+  .week-cell .dow { font-size: 9px; color: var(--fg-dim); }
   .week-cell .dnum { font-size: 8px; color: var(--fg-dim); }
   .day {
     width: 100%;
@@ -214,7 +219,6 @@
     color: var(--fg-dim);
     text-align: center;
     padding-bottom: 1px;
-    text-transform: lowercase;
   }
   .mday {
     aspect-ratio: 1 / 1;
