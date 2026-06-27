@@ -19,29 +19,39 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FFFFFF;
+    --bg: #EEEDEA;
     --fg: #141414;
     --fg-dim: #6b6b6b;
-    --border: #e2e2e2;
-    --cell-empty: #ebebeb;
-    --cell-future: #f4f4f4;
+    --border: #e0dfdb;
+    --cell-empty: #e2e1dd;
+    --cell-future: #e9e8e5;
     --done: #22C55E;
     --missed: #EF4444;
     --partial: #F59E0B;
     --accent: #141414;
-    --card-bg: #fafafa;
+    --card-bg: #f7f6f3;
+    --green: #34D17E;          /* mint/spring accent */
+    --green-soft: #C9F6DD;     /* soft pill */
+    --glass-bg: rgba(255,255,255,0.45);
+    --glass-border: rgba(255,255,255,0.65);
+    --glass-shadow: 0 6px 24px rgba(20,20,20,0.06);
   }
   html[data-theme="dark"] {
-    --bg: #000000;
+    --bg: #070707;
     --fg: #ededed;
     --fg-dim: #888888;
-    --border: #262626;
+    --border: #232323;
     --cell-empty: #1c1c1c;
     --cell-future: #121212;
     --done: #22C55E;
     --missed: #EF4444;
     --partial: #F59E0B;
     --accent: #ededed;
+    --green: #5BE8A0;
+    --green-soft: rgba(91,232,160,0.16);
+    --glass-bg: rgba(255,255,255,0.045);
+    --glass-border: rgba(255,255,255,0.09);
+    --glass-shadow: 0 6px 24px rgba(0,0,0,0.45);
     --card-bg: #0c0c0c;
   }
 
@@ -58,6 +68,26 @@
     padding: 32px 20px 64px;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    position: relative;
+  }
+  /* soft mint ambiance so glass cards have something to frost */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(640px 460px at 82% -6%, color-mix(in srgb, var(--green) 42%, transparent), transparent 70%),
+      radial-gradient(560px 420px at -8% 8%, color-mix(in srgb, var(--green) 16%, transparent), transparent 70%);
+    opacity: 0.5;
+  }
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    backdrop-filter: blur(18px) saturate(1.3);
   }
   /* keep uppercase consistent across form controls */
   button, input { text-transform: uppercase; }
@@ -139,55 +169,78 @@
   /* ---------- dashboard (fintech-style summary) ---------- */
   #dashboard { margin-bottom: 30px; }
   .dash-hero {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--card-bg);
-    padding: 20px 22px 14px;
+    border-radius: 18px;
+    padding: 22px 24px 16px;
   }
-  .dash-hero .label {
-    font-size: 10px;
-    color: var(--fg-dim);
-    letter-spacing: 0.1em;
+  /* metric selector (radio chips) */
+  .metric-select { display: flex; gap: 18px; flex-wrap: wrap; }
+  .metric-opt {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11px; color: var(--fg-dim); cursor: pointer; letter-spacing: 0.06em;
+    background: none; border: none; padding: 0;
   }
+  .metric-opt .dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    border: 1.5px solid var(--fg-dim); display: inline-block; transition: all 0.12s;
+  }
+  .metric-opt.active { color: var(--fg); }
+  .metric-opt.active .dot { background: var(--green); border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
+
+  .hero-center { text-align: center; margin: 6px 0 2px; }
   .dash-hero .big {
-    font-size: 44px;
+    font-size: clamp(56px, 12vw, 116px);
     font-weight: 700;
-    line-height: 1.02;
-    margin-top: 6px;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
   }
+  .dash-hero .big .k-unit { font-size: 0.42em; font-weight: 600; color: var(--fg-dim); letter-spacing: 0; }
+  .dash-hero .hlabel { font-size: 10px; color: var(--fg-dim); letter-spacing: 0.14em; margin-top: 8px; }
   .dash-hero .delta {
-    font-size: 12px;
-    font-weight: 600;
-    margin-left: 10px;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em; margin-top: 10px;
+    padding: 4px 11px; border-radius: 999px; background: var(--green-soft);
   }
-  .delta.up { color: var(--done); }
-  .delta.dn { color: var(--missed); }
-  .spark { width: 100%; height: 116px; display: block; margin-top: 12px; }
+  .delta.up { color: #0a7c3b; }
+  html[data-theme="dark"] .delta.up { color: var(--green); }
+  .delta.dn { color: var(--missed); background: color-mix(in srgb, var(--missed) 14%, transparent); }
+
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .goal-chip {
+    font-size: 10px; color: var(--fg-dim); letter-spacing: 0.08em; cursor: pointer;
+    border: 1px dashed var(--border); border-radius: 999px; padding: 4px 10px; background: none;
+  }
+  .goal-chip:hover { color: var(--fg); border-color: var(--fg-dim); }
+
+  .spark { width: 100%; height: 132px; display: block; margin-top: 6px; }
+
   .kpis {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
     gap: 12px;
-    margin-top: 12px;
+    margin-top: 14px;
   }
-  .kpi {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--card-bg);
-    padding: 14px 16px;
-  }
+  .kpi { border-radius: 16px; padding: 15px 17px; }
   .kpi .k-label { font-size: 10px; color: var(--fg-dim); letter-spacing: 0.1em; }
   .kpi .k-val {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 700;
     margin-top: 8px;
     font-variant-numeric: tabular-nums;
   }
   .kpi .k-val .k-unit { font-size: 13px; font-weight: 500; color: var(--fg-dim); margin-left: 2px; }
   .kpi .k-sub { font-size: 10px; color: var(--fg-dim); margin-top: 4px; min-height: 12px; }
-  .kpi .k-sub.good { color: var(--done); }
+  .kpi .k-sub.good { color: var(--green); }
+  .kpi .k-sub.bad { color: var(--missed); }
+
+  /* consistency heatmap summary */
+  .heatcard { border-radius: 16px; padding: 15px 17px; margin-top: 12px; }
+  .heatcard .k-label { font-size: 10px; color: var(--fg-dim); letter-spacing: 0.1em; margin-bottom: 10px; }
+  .heatmap { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 3px; width: max-content; max-width: 100%; }
+  .hm { width: 11px; height: 11px; border-radius: 2px; background: var(--cell-empty); }
+
+  /* per-habit mini sparkline */
+  .mini-spark { width: 96px; height: 26px; display: block; opacity: 0.9; }
 
   /* ---- container layout: week/month flow into columns; year stacks ---- */
   #habits.view-week, #habits.view-month {
@@ -199,20 +252,19 @@
   #habits.view-year .habit { margin-bottom: 10px; }
 
   .habit {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 11px 12px 12px;
-    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 13px 14px 14px;
   }
 
   .habit-head {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 8px;
     margin-bottom: 10px;
   }
+  .habit-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
   .habit-name { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; }
 
   .stats { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
@@ -508,6 +560,8 @@
   // ---------- state ----------
   let state = loadState();        // { habits: [{id, name, log:{ "YYYY-MM-DD": true|false }}] }
   let currentView = state.view || "week";
+  let heroMetric = state.heroMetric || "consistency"; // consistency | completions | today
+  let goal = (typeof state.goal === "number") ? state.goal : 0.8; // target consistency 0..1
 
   function loadState() {
     try {
@@ -523,6 +577,8 @@
   function save() {
     if (demoActive) return; // never persist example data
     state.view = currentView;
+    state.heroMetric = heroMetric;
+    state.goal = goal;
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
   }
 
@@ -732,8 +788,11 @@
 
   function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
 
-  // tiny area+line chart (Robinhood-style) from values in [0,1]
-  function sparkline(values, up) {
+  function habitSeries(h) { return windowDays().map(k => habitDayValue(h, k)); }
+  function habitConsistency(h) { const w = windowDays(); return w.length ? avg(w.map(k => habitDayValue(h, k))) : 0; }
+
+  // area+line chart (Robinhood-style) from values in [0,1]; optional dashed goal line
+  function sparkline(values, up, goalVal) {
     const W = 600, H = 140, pad = 8;
     if (!values.length) values = [0, 0];
     const n = values.length;
@@ -744,17 +803,55 @@
     let area = "M " + x(0).toFixed(1) + " " + (H - pad).toFixed(1) + " ";
     values.forEach((v, i) => { area += "L " + x(i).toFixed(1) + " " + y(v).toFixed(1) + " "; });
     area += "L " + x(n - 1).toFixed(1) + " " + (H - pad).toFixed(1) + " Z";
-    const col = up ? "var(--done)" : "var(--missed)";
+    const col = up ? "var(--green)" : "var(--missed)";
     const gid = up ? "sparkUp" : "sparkDn";
+    let goalLine = "";
+    if (typeof goalVal === "number") {
+      const gy = y(goalVal).toFixed(1);
+      goalLine = `<line x1="${pad}" y1="${gy}" x2="${W - pad}" y2="${gy}" stroke="var(--fg-dim)" stroke-width="1" stroke-dasharray="3 6" opacity="0.55" vector-effect="non-scaling-stroke"/>`;
+    }
     return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
       <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${col}" stop-opacity="0.26"/>
+        <stop offset="0%" stop-color="${col}" stop-opacity="0.28"/>
         <stop offset="100%" stop-color="${col}" stop-opacity="0"/>
       </linearGradient></defs>
       <path d="${area}" fill="url(#${gid})"/>
+      ${goalLine}
       <path d="${line}" fill="none" stroke="${col}" stroke-width="2.5"
             stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
     </svg>`;
+  }
+
+  // small line-only sparkline for habit cards
+  function miniSparkline(values) {
+    const W = 200, H = 54, pad = 4;
+    if (!values.length) values = [0, 0];
+    const n = values.length;
+    const x = i => n === 1 ? W / 2 : pad + i * (W - 2 * pad) / (n - 1);
+    const y = v => H - pad - v * (H - 2 * pad);
+    let line = "";
+    values.forEach((v, i) => { line += (i === 0 ? "M" : "L") + x(i).toFixed(1) + " " + y(v).toFixed(1) + " "; });
+    const up = values[n - 1] >= values[0];
+    const col = up ? "var(--green)" : "var(--missed)";
+    return `<svg class="mini-spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <path d="${line}" fill="none" stroke="${col}" stroke-width="2"
+            stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
+  }
+
+  function heatmapHTML() {
+    const today = new Date(), tKey = todayKey(), weeks = 13;
+    const startMon = addDays(today, -isoDow(today) - (weeks - 1) * 7);
+    let cells = "";
+    for (let c = 0; c < weeks; c++) {
+      for (let r = 0; r < 7; r++) {
+        const k = dateKey(addDays(startMon, c * 7 + r));
+        let style = "";
+        if (k > tKey) style = "background:transparent";
+        else { const rate = dailyRate(k); if (rate > 0) style = `background:color-mix(in srgb, var(--green) ${Math.round(25 + rate * 75)}%, transparent)`; }
+        cells += `<div class="hm" style="${style}" title="${k}"></div>`;
+      }
+    }
+    return cells;
   }
 
   function renderDashboard() {
@@ -763,46 +860,102 @@
     const habits = state.habits;
     const tKey = todayKey();
     const win = windowDays();
+    const pw = prevWindow(win);
     const series = win.map(dailyRate);
     const curAvg = avg(series);
-    const prevAvg = avg(prevWindow(win).map(dailyRate));
-    const delta = (curAvg - prevAvg) * 100;
-    const up = delta >= 0;
+    const prevAvg = avg(pw.map(dailyRate));
 
     let doneToday = 0;
     for (const h of habits) if (dayStatus(h, tKey) === "done") doneToday++;
+    const todayPct = habits.length ? Math.round(doneToday / habits.length * 100) : 0;
 
     let best = 0, bestName = "—";
     for (const h of habits) { const s = currentStreak(h); if (s > best) { best = s; bestName = h.name; } }
 
-    let comps = 0;
+    let comps = 0, prevComps = 0;
     for (const k of win) for (const h of habits) if (dayStatus(h, k) === "done") comps++;
+    for (const k of pw) for (const h of habits) if (dayStatus(h, k) === "done") prevComps++;
+
+    // top / worst habit by consistency over the timeframe
+    let top = null, worst = null;
+    if (habits.length) {
+      const arr = habits.map(h => ({ name: h.name, c: habitConsistency(h) })).sort((a, b) => b.c - a.c);
+      top = arr[0]; worst = arr[arr.length - 1];
+    }
 
     const rangeLabel = currentView === "week" ? "this week" : currentView === "month" ? "this month" : "this year";
-    const deltaStr = (up ? "▲ +" : "▼ ") + Math.abs(delta).toFixed(1) + "% vs prev";
-    const todayPct = habits.length ? Math.round(doneToday / habits.length * 100) : 0;
+
+    // selected hero metric drives the big number + delta
+    let bigHTML, hlabel, deltaVal, suffix, goalArg = goal;
+    if (heroMetric === "completions") {
+      bigHTML = `${comps}`;
+      hlabel = `completions · ${rangeLabel}`;
+      deltaVal = prevComps ? (comps - prevComps) / prevComps * 100 : (comps > 0 ? 100 : 0);
+      suffix = "vs prev"; goalArg = null;
+    } else if (heroMetric === "today") {
+      bigHTML = `${todayPct}<span class="k-unit">%</span>`;
+      hlabel = "today complete";
+      deltaVal = (dailyRate(tKey) - dailyRate(dateKey(addDays(new Date(), -1)))) * 100;
+      suffix = "vs yesterday";
+    } else {
+      bigHTML = `${Math.round(curAvg * 100)}<span class="k-unit">%</span>`;
+      hlabel = `consistency · ${rangeLabel}`;
+      deltaVal = (curAvg - prevAvg) * 100;
+      suffix = "vs prev";
+    }
+    const up = deltaVal >= 0;
+    const deltaStr = (up ? "▲ +" : "▼ −") + Math.abs(deltaVal).toFixed(1) + "% " + suffix;
+
+    const metrics = [["consistency", "consistency"], ["completions", "completions"], ["today", "today"]];
+    const sel = metrics.map(([id, lbl]) =>
+      `<button class="metric-opt ${heroMetric === id ? "active" : ""}" data-metric="${id}"><span class="dot"></span>${lbl}</button>`).join("");
 
     el.innerHTML =
-      `<div class="dash-hero">
-        <div class="label">consistency · ${rangeLabel}</div>
-        <div class="big">${Math.round(curAvg * 100)}<span class="k-unit">%</span>
-          <span class="delta ${up ? "up" : "dn"}">${deltaStr}</span></div>
-        ${sparkline(series, up)}
+      `<div class="dash-hero glass">
+        <div class="hero-top">
+          <div class="metric-select">${sel}</div>
+          <button class="goal-chip" id="goalChip">◎ goal ${Math.round(goal * 100)}%</button>
+        </div>
+        <div class="hero-center">
+          <div class="big">${bigHTML}</div>
+          <div class="hlabel">${hlabel}</div>
+          <div class="delta ${up ? "up" : "dn"}">${deltaStr}</div>
+        </div>
+        ${sparkline(series, up, goalArg)}
       </div>
       <div class="kpis">
-        <div class="kpi"><div class="k-label">today</div>
+        <div class="kpi glass"><div class="k-label">today</div>
           <div class="k-val">${doneToday}<span class="k-unit">/${habits.length}</span></div>
           <div class="k-sub ${todayPct === 100 && habits.length ? "good" : ""}">${todayPct}% complete</div></div>
-        <div class="kpi"><div class="k-label">best active streak</div>
+        <div class="kpi glass"><div class="k-label">best active streak</div>
           <div class="k-val">${best}<span class="k-unit">d</span></div>
           <div class="k-sub">${best ? bestName : "no active streak"}</div></div>
-        <div class="kpi"><div class="k-label">completions · ${rangeLabel}</div>
+        <div class="kpi glass"><div class="k-label">completions · ${rangeLabel}</div>
           <div class="k-val">${comps}</div>
           <div class="k-sub">habit-days done</div></div>
-        <div class="kpi"><div class="k-label">active habits</div>
+        <div class="kpi glass"><div class="k-label">active habits</div>
           <div class="k-val">${habits.length}</div>
           <div class="k-sub">tracked</div></div>
+        <div class="kpi glass"><div class="k-label">top habit · ${rangeLabel}</div>
+          <div class="k-val">${top ? Math.round(top.c * 100) : 0}<span class="k-unit">%</span></div>
+          <div class="k-sub good">${top ? top.name : "—"}</div></div>
+        <div class="kpi glass"><div class="k-label">needs work</div>
+          <div class="k-val">${worst && habits.length > 1 ? Math.round(worst.c * 100) : (worst ? Math.round(worst.c * 100) : 0)}<span class="k-unit">%</span></div>
+          <div class="k-sub ${habits.length > 1 ? "bad" : ""}">${habits.length > 1 ? worst.name : "add more habits"}</div></div>
+      </div>
+      <div class="heatcard glass">
+        <div class="k-label">consistency map · last 13 weeks</div>
+        <div class="heatmap">${heatmapHTML()}</div>
       </div>`;
+
+    el.querySelectorAll(".metric-opt").forEach(b => b.onclick = () => { heroMetric = b.dataset.metric; save(); renderDashboard(); });
+    const gc = el.querySelector("#goalChip");
+    if (gc) gc.onclick = () => {
+      const v = prompt("Goal consistency % (1–100):", Math.round(goal * 100));
+      if (v === null) return;
+      const n = Math.max(1, Math.min(100, parseInt(v, 10) || 0));
+      goal = n / 100; save(); renderDashboard();
+    };
   }
 
   function render() {
@@ -840,7 +993,7 @@
 
   function renderHabit(h) {
     const card = document.createElement("div");
-    card.className = "habit";
+    card.className = "habit glass";
 
     const head = document.createElement("div");
     head.className = "habit-head";
@@ -867,7 +1020,12 @@
     del.title = "remove habit";
     del.setAttribute("aria-label", "remove habit");
     del.onclick = () => removeHabit(h.id);
-    head.appendChild(del);
+
+    const right = document.createElement("div");
+    right.className = "habit-right";
+    right.innerHTML = miniSparkline(habitSeries(h));
+    right.appendChild(del);
+    head.appendChild(right);
 
     card.appendChild(head);
 
