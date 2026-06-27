@@ -77,16 +77,12 @@
   }
 
   h1 {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
     margin: 0;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.08em;
   }
-  h1 .blink {
-    color: var(--done);
-    animation: blink 1.2s steps(2, start) infinite;
-  }
-  @keyframes blink { to { visibility: hidden; } }
+  h1 .x { color: var(--done); font-weight: 700; padding: 0 0.12em; }
 
   .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
@@ -155,7 +151,7 @@
     gap: 6px;
     margin-bottom: 10px;
   }
-  .habit-name { font-size: 13px; font-weight: 700; }
+  .habit-name { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; }
 
   .stats { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
   .stat { color: var(--fg-dim); font-size: 10px; white-space: nowrap; }
@@ -384,12 +380,21 @@
   }
 
   footer { margin-top: 32px; font-size: 11px; color: var(--fg-dim); text-align: center; }
+
+  /* crisper small-caps labels + a little more weight for an official feel */
+  .stat, .month-label, .checklist-head, .week-cell .dow, .week-cell .dnum,
+  .month-grid .mhead, .legend, footer, .demo-note, .year-months {
+    letter-spacing: 0.06em;
+  }
+  .stat, .view-switch button, .checklist-head { font-weight: 500; }
+  .view-switch button { letter-spacing: 0.06em; }
+  #addBtn, .add-row input, .add-row input::placeholder { letter-spacing: 0.04em; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>done_or_missed<span class="blink">_</span></h1>
+    <h1>done <span class="x">×</span> missed</h1>
     <div class="controls">
       <div class="view-switch" id="viewSwitch">
         <button data-view="week">week</button>
