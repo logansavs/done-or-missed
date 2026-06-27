@@ -16,7 +16,7 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAtKADAAQAAAABAAAAtAAAAAB1HbRDAAADZElEQVR4Ae3SAQ0AIRAEseelIAy36IIEGZOeg53rmHudzykQKfBHdpihwCsANAipAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pDNAMpAoAnXqnMUAzkCoAdOqdxgDNQKoA0Kl3GgM0A6kCQKfeaQzQDKQKAJ16pzFAM5AqAHTqncYAzUCqANCpdxoDNAOpAkCn3mkM0AykCgCdeqcxQDOQKgB06p3GAM1AqgDQqXcaAzQDqQJAp95pzAVQ3wOs0fx2XQAAAABJRU5ErkJggg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #EEEDEA;
@@ -32,9 +32,9 @@
     --card-bg: #f7f6f3;
     --green: #34D17E;          /* mint/spring accent */
     --green-soft: #C9F6DD;     /* soft pill */
-    --glass-bg: rgba(255,255,255,0.45);
-    --glass-border: rgba(255,255,255,0.65);
-    --glass-shadow: 0 6px 24px rgba(20,20,20,0.06);
+    --glass-bg: rgba(255,255,255,0.28);
+    --glass-border: rgba(255,255,255,0.55);
+    --glass-shadow: 0 8px 30px rgba(20,20,20,0.07);
   }
   html[data-theme="dark"] {
     --bg: #070707;
@@ -49,9 +49,9 @@
     --accent: #ededed;
     --green: #5BE8A0;
     --green-soft: rgba(91,232,160,0.16);
-    --glass-bg: rgba(255,255,255,0.045);
-    --glass-border: rgba(255,255,255,0.09);
-    --glass-shadow: 0 6px 24px rgba(0,0,0,0.45);
+    --glass-bg: rgba(255,255,255,0.03);
+    --glass-border: rgba(255,255,255,0.08);
+    --glass-shadow: 0 8px 30px rgba(0,0,0,0.5);
     --card-bg: #0c0c0c;
   }
 
@@ -61,13 +61,14 @@
     margin: 0;
     background: var(--bg);
     color: var(--fg);
-    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     padding: 32px 20px 64px;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     position: relative;
   }
   /* soft mint ambiance so glass cards have something to frost */
@@ -78,16 +79,17 @@
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(640px 460px at 82% -6%, color-mix(in srgb, var(--green) 42%, transparent), transparent 70%),
-      radial-gradient(560px 420px at -8% 8%, color-mix(in srgb, var(--green) 16%, transparent), transparent 70%);
-    opacity: 0.5;
+      radial-gradient(640px 460px at 82% -6%, color-mix(in srgb, var(--green) 46%, transparent), transparent 70%),
+      radial-gradient(620px 480px at -8% 6%, color-mix(in srgb, var(--green) 20%, transparent), transparent 70%),
+      radial-gradient(520px 520px at 60% 108%, color-mix(in srgb, var(--green) 14%, transparent), transparent 70%);
+    opacity: 0.62;
   }
   .glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
-    -webkit-backdrop-filter: blur(18px) saturate(1.3);
-    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(30px) saturate(1.45);
+    backdrop-filter: blur(30px) saturate(1.45);
   }
   /* keep uppercase consistent across form controls */
   button, input { text-transform: uppercase; }
@@ -112,7 +114,7 @@
     margin: 0;
     letter-spacing: 0.08em;
   }
-  h1 .x { color: var(--done); font-weight: 700; padding: 0 0.12em; }
+  h1 .x { color: var(--fg); font-weight: 700; padding: 0 0.12em; }
 
   .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
@@ -128,6 +130,17 @@
     border-radius: 4px;
   }
   button:hover { border-color: var(--fg-dim); }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 36px;
+    padding: 0;
+    color: var(--fg);
+    border-radius: 8px;
+  }
 
   .view-switch { display: inline-flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
   .view-switch button {
@@ -515,7 +528,7 @@
         <button data-view="month">month</button>
         <button data-view="year">year</button>
       </div>
-      <button id="themeToggle" title="toggle theme">◐ theme</button>
+      <button id="themeToggle" class="icon-btn" title="toggle light/dark" aria-label="toggle light/dark"></button>
     </div>
   </header>
 
@@ -1237,9 +1250,14 @@
   }
 
   // ---------- theme ----------
+  const ICON_MOON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>`;
+  const ICON_SUN = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.5 4.5l1.8 1.8M17.7 17.7l1.8 1.8M2 12h2.5M19.5 12H22M4.5 19.5l1.8-1.8M17.7 6.3l1.8-1.8"/></svg>`;
+
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    const btn = document.getElementById("themeToggle");
+    if (btn) btn.innerHTML = theme === "dark" ? ICON_SUN : ICON_MOON; // show what you'll switch to
   }
 
   function initTheme() {
