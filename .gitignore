@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Local Claude Code / preview tooling — not needed for the deployed site
+.claude/
