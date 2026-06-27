@@ -214,7 +214,7 @@
     font-size: 13px; font-weight: 600; letter-spacing: 0.04em; margin-top: 10px;
     padding: 4px 11px; border-radius: 999px; background: var(--green-soft);
   }
-  .delta .vs-word { text-transform: lowercase; opacity: 0.8; }
+  .delta .vs-word { font-size: 0.72em; vertical-align: middle; opacity: 0.7; margin: 0 1px; }
   .delta.up { color: #0a7c3b; }
   html[data-theme="dark"] .delta.up { color: var(--green); }
   .delta.dn { color: var(--missed); background: color-mix(in srgb, var(--missed) 14%, transparent); }
@@ -273,8 +273,24 @@
     gap: 8px;
     margin-bottom: 10px;
   }
-  .habit-right { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-  .habit-name { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; }
+  .habit-right { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .habit-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    outline: none;
+    border-radius: 4px;
+    margin: -2px -4px 0;
+    padding: 2px 4px;
+    min-width: 1ch;
+  }
+  .habit-name:focus { background: color-mix(in srgb, var(--fg) 6%, transparent); }
+  .habit-name:empty:before { content: attr(data-ph); color: var(--fg-dim); font-weight: 600; }
+  .chk-toggle {
+    border: none; background: none; padding: 0 4px;
+    color: var(--fg-dim); font-size: 12px; line-height: 1; cursor: pointer;
+  }
+  .chk-toggle:hover { color: var(--fg); }
 
   .stats { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
   .stat { color: var(--fg-dim); font-size: 10px; white-space: nowrap; }
@@ -320,16 +336,16 @@
     transition: transform 0.1s ease, filter 0.12s;
     user-select: none;
   }
-  .day:hover { filter: brightness(1.06); }
+  .day:hover { filter: brightness(1.05); }
   .day:active { transform: scale(0.94); }
-  .day.done { background: var(--done); box-shadow: 0 0 11px color-mix(in srgb, var(--done) 50%, transparent); }
-  .day.missed { background: var(--missed); box-shadow: 0 0 11px color-mix(in srgb, var(--missed) 42%, transparent); }
-  .day.partial { background: var(--partial); box-shadow: 0 0 11px color-mix(in srgb, var(--partial) 45%, transparent); }
+  .day.done { background: color-mix(in srgb, var(--done) 84%, transparent); box-shadow: 0 0 12px color-mix(in srgb, var(--done) 36%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
+  .day.missed { background: color-mix(in srgb, var(--missed) 84%, transparent); box-shadow: 0 0 12px color-mix(in srgb, var(--missed) 32%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
+  .day.partial { background: color-mix(in srgb, var(--partial) 84%, transparent); box-shadow: 0 0 12px color-mix(in srgb, var(--partial) 34%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
   .day.future {
     background: color-mix(in srgb, var(--fg) 3%, transparent);
     box-shadow: none; cursor: not-allowed; opacity: 0.5;
   }
-  .day.today { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--green); }
+  .day.today { box-shadow: inset 0 0 0 2px var(--fg); }
 
   /* ---- MONTH VIEW ---- */
   .month-grid {
@@ -357,16 +373,16 @@
     transition: transform 0.1s ease, filter 0.12s;
     user-select: none;
   }
-  .mday:hover { filter: brightness(1.06); }
-  .mday.done { background: var(--done); color: #053b18; box-shadow: 0 0 11px color-mix(in srgb, var(--done) 50%, transparent); }
-  .mday.missed { background: var(--missed); color: #4a0707; box-shadow: 0 0 11px color-mix(in srgb, var(--missed) 42%, transparent); }
-  .mday.partial { background: var(--partial); color: #4a3000; box-shadow: 0 0 11px color-mix(in srgb, var(--partial) 45%, transparent); }
+  .mday:hover { filter: brightness(1.05); }
+  .mday.done { background: color-mix(in srgb, var(--done) 84%, transparent); color: #053b18; box-shadow: 0 0 12px color-mix(in srgb, var(--done) 36%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
+  .mday.missed { background: color-mix(in srgb, var(--missed) 84%, transparent); color: #4a0707; box-shadow: 0 0 12px color-mix(in srgb, var(--missed) 32%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
+  .mday.partial { background: color-mix(in srgb, var(--partial) 84%, transparent); color: #4a3000; box-shadow: 0 0 12px color-mix(in srgb, var(--partial) 34%, transparent), inset 0 0 0 1px rgba(255,255,255,0.30); }
   .mday.future {
     background: color-mix(in srgb, var(--fg) 3%, transparent);
     box-shadow: none; cursor: not-allowed; opacity: 0.5;
   }
   .mday.blank { background: transparent; cursor: default; box-shadow: none; }
-  .mday.today { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--green); }
+  .mday.today { box-shadow: inset 0 0 0 2px var(--fg); font-weight: 700; color: var(--fg); }
 
   .month-label { font-size: 10px; color: var(--fg-dim); margin-bottom: 6px; }
 
@@ -390,12 +406,12 @@
     transition: filter 0.12s;
   }
   .ycell:hover { filter: brightness(1.1); }
-  .ycell.done { background: var(--done); box-shadow: 0 0 6px color-mix(in srgb, var(--done) 50%, transparent); }
-  .ycell.missed { background: var(--missed); box-shadow: 0 0 6px color-mix(in srgb, var(--missed) 42%, transparent); }
-  .ycell.partial { background: var(--partial); box-shadow: 0 0 6px color-mix(in srgb, var(--partial) 45%, transparent); }
+  .ycell.done { background: color-mix(in srgb, var(--done) 84%, transparent); box-shadow: 0 0 6px color-mix(in srgb, var(--done) 40%, transparent), inset 0 0 0 1px rgba(255,255,255,0.28); }
+  .ycell.missed { background: color-mix(in srgb, var(--missed) 84%, transparent); box-shadow: 0 0 6px color-mix(in srgb, var(--missed) 36%, transparent), inset 0 0 0 1px rgba(255,255,255,0.28); }
+  .ycell.partial { background: color-mix(in srgb, var(--partial) 84%, transparent); box-shadow: 0 0 6px color-mix(in srgb, var(--partial) 38%, transparent), inset 0 0 0 1px rgba(255,255,255,0.28); }
   .ycell.future { background: color-mix(in srgb, var(--fg) 3%, transparent); box-shadow: none; cursor: not-allowed; }
   .ycell.pad { background: transparent; box-shadow: none; cursor: default; }
-  .ycell.today { box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--green); }
+  .ycell.today { box-shadow: inset 0 0 0 1.5px var(--fg); }
   .year-months {
     display: flex;
     font-size: 10px;
@@ -545,10 +561,7 @@
 
   <div class="section-head">
     <span class="section-title">habits</span>
-    <div class="add-row">
-      <input id="habitInput" type="text" placeholder="new habit name..." maxlength="40" autocomplete="off">
-      <button id="addBtn">+ add</button>
-    </div>
+    <button id="addBtn">+ add</button>
   </div>
 
   <div id="habits"></div>
@@ -582,7 +595,8 @@
   // ---------- state ----------
   let state = loadState();        // { habits: [{id, name, log:{ "YYYY-MM-DD": true|false }}] }
   let currentView = state.view || "week";
-  let heroMetric = state.heroMetric || "consistency"; // consistency | completions | today
+  let heroMetric = state.heroMetric || "today"; // today | consistency | completions
+  let focusHabitId = null; // newly-added habit to focus for inline naming
   let goal = (typeof state.goal === "number") ? state.goal : 0.8; // target consistency 0..1
 
   function loadState() {
@@ -631,11 +645,11 @@
   function isFuture(k) { return k > todayKey(); }
 
   // ---------- habit CRUD ----------
-  function addHabit(name) {
-    name = name.trim();
-    if (!name) return;
+  function addHabit() {
     if (demoActive) { state.habits = []; demoActive = false; } // clear examples on first real habit
-    state.habits.push({ id: "h" + Date.now() + Math.random().toString(36).slice(2, 6), name, log: {} });
+    const id = "h" + Date.now() + Math.random().toString(36).slice(2, 6);
+    state.habits.push({ id, name: "", log: {} });
+    focusHabitId = id; // focus its name field for inline naming
     save();
     render();
   }
@@ -833,11 +847,11 @@
 
   // area+line chart (Robinhood-style) from values in [0,1]; optional dashed goal line
   function sparkline(values, up, goalVal) {
-    const W = 600, H = 140, pad = 8;
+    const W = 600, H = 140, pad = 20;
     if (!values.length) values = [0, 0];
     const n = values.length;
     const x = i => n === 1 ? W / 2 : pad + i * (W - 2 * pad) / (n - 1);
-    const y = v => H - pad - v * (H - 2 * pad);
+    const y = v => { const c = Math.max(0, Math.min(1, v)); return H - pad - c * (H - 2 * pad); };
     const pts = values.map((v, i) => [x(i), y(v)]);
     const line = smoothPath(pts);
     const area = `${line} L ${pts[n - 1][0].toFixed(1)} ${(H - pad).toFixed(1)} L ${pts[0][0].toFixed(1)} ${(H - pad).toFixed(1)} Z`;
@@ -927,7 +941,7 @@
     const up = deltaVal >= 0;
     const deltaStr = (up ? "▲ +" : "▼ −") + Math.abs(deltaVal).toFixed(1) + '% <span class="vs-word">vs</span> ' + suffix;
 
-    const metrics = [["consistency", "consistency"], ["completions", "completions"], ["today", "today"]];
+    const metrics = [["today", "today"], ["consistency", "consistency"], ["completions", "completions"]];
     const sel = metrics.map(([id, lbl]) =>
       `<button class="metric-opt ${heroMetric === id ? "active" : ""}" data-metric="${id}"><span class="dot"></span>${lbl}</button>`).join("");
 
@@ -959,10 +973,10 @@
           <div class="k-sub">tracked</div></div>
         <div class="kpi glass"><div class="k-label">top habit · ${rangeLabel}</div>
           <div class="k-val">${top ? Math.round(top.c * 100) : 0}<span class="k-unit">%</span></div>
-          <div class="k-sub good">${top ? top.name : "—"}</div></div>
-        <div class="kpi glass"><div class="k-label">needs work</div>
+          <div class="k-sub">${top ? top.name : "—"}</div></div>
+        <div class="kpi glass"><div class="k-label">needs work · ${rangeLabel}</div>
           <div class="k-val">${worst && habits.length > 1 ? Math.round(worst.c * 100) : (worst ? Math.round(worst.c * 100) : 0)}<span class="k-unit">%</span></div>
-          <div class="k-sub ${habits.length > 1 ? "bad" : ""}">${habits.length > 1 ? worst.name : "add more habits"}</div></div>
+          <div class="k-sub">${habits.length > 1 ? worst.name : "add more habits"}</div></div>
       </div>`;
 
     el.querySelectorAll(".metric-opt").forEach(b => b.onclick = () => { heroMetric = b.dataset.metric; save(); renderDashboard(); });
@@ -1018,7 +1032,15 @@
     const left = document.createElement("div");
     const name = document.createElement("div");
     name.className = "habit-name";
+    name.contentEditable = "true";
+    name.spellcheck = false;
+    name.dataset.ph = "habit name…";
     name.textContent = h.name;
+    name.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); name.blur(); } });
+    name.addEventListener("blur", () => {
+      const v = name.textContent.replace(/\s+/g, " ").trim();
+      if (v !== h.name) { h.name = v; save(); renderDashboard(); }
+    });
     left.appendChild(name);
 
     const stats = document.createElement("div");
@@ -1031,23 +1053,42 @@
     left.appendChild(stats);
     head.appendChild(left);
 
+    const right = document.createElement("div");
+    right.className = "habit-right";
+
+    if (hasSubs(h)) {
+      const tg = document.createElement("button");
+      tg.className = "chk-toggle";
+      tg.title = h.collapsed ? "show checklist" : "hide checklist";
+      tg.textContent = h.collapsed ? "▸" : "▾";
+      tg.onclick = () => { h.collapsed = !h.collapsed; save(); render(); };
+      right.appendChild(tg);
+    }
+
     const del = document.createElement("button");
     del.className = "delete-btn";
     del.textContent = "✕";
     del.title = "remove habit";
     del.setAttribute("aria-label", "remove habit");
     del.onclick = () => removeHabit(h.id);
-
-    const right = document.createElement("div");
-    right.className = "habit-right";
-    right.innerHTML = miniSparkline(habitSeries(h));
     right.appendChild(del);
     head.appendChild(right);
 
     card.appendChild(head);
 
-    // today's sub-item checklist
-    if (hasSubs(h)) {
+    // focus the name of a freshly-added habit for inline naming
+    if (focusHabitId === h.id) {
+      focusHabitId = null;
+      requestAnimationFrame(() => {
+        card.scrollIntoView({ block: "center", behavior: "smooth" });
+        name.focus();
+        const r = document.createRange(); r.selectNodeContents(name); r.collapse(false);
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      });
+    }
+
+    // today's sub-item checklist (collapsible — hidden state matches plain card height)
+    if (hasSubs(h) && !h.collapsed) {
       const tKey = todayKey();
       const entry = (h.subLog && h.subLog[tKey]) || {};
       const done = h.subs.filter(s => entry[s.id]).length;
@@ -1274,15 +1315,7 @@
   }
 
   // ---------- events ----------
-  document.getElementById("addBtn").onclick = () => {
-    const input = document.getElementById("habitInput");
-    addHabit(input.value);
-    input.value = "";
-    input.focus();
-  };
-  document.getElementById("habitInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") document.getElementById("addBtn").click();
-  });
+  document.getElementById("addBtn").onclick = () => addHabit();
 
   document.getElementById("viewSwitch").addEventListener("click", e => {
     const btn = e.target.closest("button[data-view]");
