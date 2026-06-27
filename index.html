@@ -214,6 +214,7 @@
     font-size: 13px; font-weight: 600; letter-spacing: 0.04em; margin-top: 10px;
     padding: 4px 11px; border-radius: 999px; background: var(--green-soft);
   }
+  .delta .vs-word { text-transform: lowercase; opacity: 0.8; }
   .delta.up { color: #0a7c3b; }
   html[data-theme="dark"] .delta.up { color: var(--green); }
   .delta.dn { color: var(--missed); background: color-mix(in srgb, var(--missed) 14%, transparent); }
@@ -246,11 +247,6 @@
   .kpi .k-sub.good { color: var(--green); }
   .kpi .k-sub.bad { color: var(--missed); }
 
-  /* consistency heatmap summary */
-  .heatcard { border-radius: 16px; padding: 15px 17px; margin-top: 12px; }
-  .heatcard .k-label { font-size: 10px; color: var(--fg-dim); letter-spacing: 0.1em; margin-bottom: 10px; }
-  .heatmap { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); gap: 3px; width: max-content; max-width: 100%; }
-  .hm { width: 11px; height: 11px; border-radius: 2px; background: var(--cell-empty); }
 
   /* per-habit mini sparkline */
   .mini-spark { width: 96px; height: 26px; display: block; opacity: 0.9; }
@@ -324,14 +320,11 @@
     transition: transform 0.1s ease, filter 0.12s;
     user-select: none;
   }
-  .day:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .day:hover { filter: brightness(1.06); }
   .day:active { transform: scale(0.94); }
-  .day.done { background: linear-gradient(155deg, color-mix(in srgb, var(--done) 68%, #fff), var(--done)); }
-  .day.missed { background: linear-gradient(155deg, color-mix(in srgb, var(--missed) 70%, #fff), var(--missed)); }
-  .day.partial { background: linear-gradient(155deg, color-mix(in srgb, var(--partial) 70%, #fff), var(--partial)); }
-  .day.done, .day.missed, .day.partial {
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 2px 5px rgba(20,20,20,0.10);
-  }
+  .day.done { background: var(--done); box-shadow: 0 0 11px color-mix(in srgb, var(--done) 50%, transparent); }
+  .day.missed { background: var(--missed); box-shadow: 0 0 11px color-mix(in srgb, var(--missed) 42%, transparent); }
+  .day.partial { background: var(--partial); box-shadow: 0 0 11px color-mix(in srgb, var(--partial) 45%, transparent); }
   .day.future {
     background: color-mix(in srgb, var(--fg) 3%, transparent);
     box-shadow: none; cursor: not-allowed; opacity: 0.5;
@@ -364,13 +357,10 @@
     transition: transform 0.1s ease, filter 0.12s;
     user-select: none;
   }
-  .mday:hover { filter: brightness(1.05); transform: translateY(-1px); }
-  .mday.done { background: linear-gradient(155deg, color-mix(in srgb, var(--done) 68%, #fff), var(--done)); color: #053b18; }
-  .mday.missed { background: linear-gradient(155deg, color-mix(in srgb, var(--missed) 70%, #fff), var(--missed)); color: #4a0707; }
-  .mday.partial { background: linear-gradient(155deg, color-mix(in srgb, var(--partial) 70%, #fff), var(--partial)); color: #4a3000; }
-  .mday.done, .mday.missed, .mday.partial {
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 2px 5px rgba(20,20,20,0.10);
-  }
+  .mday:hover { filter: brightness(1.06); }
+  .mday.done { background: var(--done); color: #053b18; box-shadow: 0 0 11px color-mix(in srgb, var(--done) 50%, transparent); }
+  .mday.missed { background: var(--missed); color: #4a0707; box-shadow: 0 0 11px color-mix(in srgb, var(--missed) 42%, transparent); }
+  .mday.partial { background: var(--partial); color: #4a3000; box-shadow: 0 0 11px color-mix(in srgb, var(--partial) 45%, transparent); }
   .mday.future {
     background: color-mix(in srgb, var(--fg) 3%, transparent);
     box-shadow: none; cursor: not-allowed; opacity: 0.5;
@@ -399,13 +389,10 @@
     cursor: pointer;
     transition: filter 0.12s;
   }
-  .ycell:hover { filter: brightness(1.08); }
-  .ycell.done { background: linear-gradient(150deg, color-mix(in srgb, var(--done) 66%, #fff), var(--done)); }
-  .ycell.missed { background: linear-gradient(150deg, color-mix(in srgb, var(--missed) 68%, #fff), var(--missed)); }
-  .ycell.partial { background: linear-gradient(150deg, color-mix(in srgb, var(--partial) 68%, #fff), var(--partial)); }
-  .ycell.done, .ycell.missed, .ycell.partial {
-    box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.5);
-  }
+  .ycell:hover { filter: brightness(1.1); }
+  .ycell.done { background: var(--done); box-shadow: 0 0 6px color-mix(in srgb, var(--done) 50%, transparent); }
+  .ycell.missed { background: var(--missed); box-shadow: 0 0 6px color-mix(in srgb, var(--missed) 42%, transparent); }
+  .ycell.partial { background: var(--partial); box-shadow: 0 0 6px color-mix(in srgb, var(--partial) 45%, transparent); }
   .ycell.future { background: color-mix(in srgb, var(--fg) 3%, transparent); box-shadow: none; cursor: not-allowed; }
   .ycell.pad { background: transparent; box-shadow: none; cursor: default; }
   .ycell.today { box-shadow: 0 0 0 1.5px var(--bg), 0 0 0 3px var(--green); }
@@ -477,19 +464,24 @@
     user-select: none;
   }
   .sub-box {
-    width: 17px;
-    height: 17px;
+    width: 18px;
+    height: 18px;
     flex: 0 0 auto;
     border: 1.5px solid var(--fg-dim);
-    border-radius: 4px;
+    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
     line-height: 1;
     color: #fff;
+    transition: box-shadow 0.12s, background 0.12s, border-color 0.12s;
   }
-  .sub-item.checked .sub-box { background: var(--done); border-color: var(--done); }
+  .sub-item.checked .sub-box {
+    background: var(--done);
+    border-color: var(--done);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--done) 55%, transparent);
+  }
   .sub-item.checked .sub-label { color: var(--fg-dim); text-decoration: line-through; }
   .sub-remove {
     margin-left: auto;
@@ -883,22 +875,6 @@
             stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
   }
 
-  function heatmapHTML() {
-    const today = new Date(), tKey = todayKey(), weeks = 13;
-    const startMon = addDays(today, -isoDow(today) - (weeks - 1) * 7);
-    let cells = "";
-    for (let c = 0; c < weeks; c++) {
-      for (let r = 0; r < 7; r++) {
-        const k = dateKey(addDays(startMon, c * 7 + r));
-        let style = "";
-        if (k > tKey) style = "background:transparent";
-        else { const rate = dailyRate(k); if (rate > 0) style = `background:color-mix(in srgb, var(--green) ${Math.round(25 + rate * 75)}%, transparent)`; }
-        cells += `<div class="hm" style="${style}" title="${k}"></div>`;
-      }
-    }
-    return cells;
-  }
-
   function renderDashboard() {
     const el = document.getElementById("dashboard");
     if (!el) return;
@@ -936,20 +912,20 @@
       bigHTML = `${comps}`;
       hlabel = `completions · ${rangeLabel}`;
       deltaVal = prevComps ? (comps - prevComps) / prevComps * 100 : (comps > 0 ? 100 : 0);
-      suffix = "vs prev"; goalArg = null;
+      suffix = "prev"; goalArg = null;
     } else if (heroMetric === "today") {
       bigHTML = `${todayPct}<span class="k-unit">%</span>`;
       hlabel = "today complete";
       deltaVal = (dailyRate(tKey) - dailyRate(dateKey(addDays(new Date(), -1)))) * 100;
-      suffix = "vs yesterday";
+      suffix = "yesterday";
     } else {
       bigHTML = `${Math.round(curAvg * 100)}<span class="k-unit">%</span>`;
       hlabel = `consistency · ${rangeLabel}`;
       deltaVal = (curAvg - prevAvg) * 100;
-      suffix = "vs prev";
+      suffix = "prev";
     }
     const up = deltaVal >= 0;
-    const deltaStr = (up ? "▲ +" : "▼ −") + Math.abs(deltaVal).toFixed(1) + "% " + suffix;
+    const deltaStr = (up ? "▲ +" : "▼ −") + Math.abs(deltaVal).toFixed(1) + '% <span class="vs-word">vs</span> ' + suffix;
 
     const metrics = [["consistency", "consistency"], ["completions", "completions"], ["today", "today"]];
     const sel = metrics.map(([id, lbl]) =>
@@ -987,10 +963,6 @@
         <div class="kpi glass"><div class="k-label">needs work</div>
           <div class="k-val">${worst && habits.length > 1 ? Math.round(worst.c * 100) : (worst ? Math.round(worst.c * 100) : 0)}<span class="k-unit">%</span></div>
           <div class="k-sub ${habits.length > 1 ? "bad" : ""}">${habits.length > 1 ? worst.name : "add more habits"}</div></div>
-      </div>
-      <div class="heatcard glass">
-        <div class="k-label">consistency map · last 13 weeks</div>
-        <div class="heatmap">${heatmapHTML()}</div>
       </div>`;
 
     el.querySelectorAll(".metric-opt").forEach(b => b.onclick = () => { heroMetric = b.dataset.metric; save(); renderDashboard(); });
