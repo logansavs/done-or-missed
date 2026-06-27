@@ -360,10 +360,22 @@
   .sub-remove:hover { opacity: 1; color: var(--missed); }
   .add-sub {
     align-self: flex-start;
+    border: none;
+    background: none;
+    border-radius: 0;
     font-size: 11px;
-    padding: 4px 9px;
+    padding: 2px 0;
     margin: -6px 0 14px;
     color: var(--fg-dim);
+    opacity: 0.55;
+    transition: opacity 0.12s, color 0.12s;
+  }
+  .add-sub:hover {
+    border: none;
+    opacity: 1;
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   footer { margin-top: 32px; font-size: 11px; color: var(--fg-dim); text-align: center; }
